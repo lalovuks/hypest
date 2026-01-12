@@ -239,10 +239,15 @@
 <body>
     <!-- Loading Screen -->
     <div id="loading-screen">
-        <video id="loading-video" autoplay muted>
-            <source src="hypest.webm" type="video/webm">
-            Your browser does not support the video tag.
-        </video>
+        <video id="loading-video" autoplay muted playsinline>
+    <!-- MP4 for broad browser support -->
+    <source src="hypest.mp4" type="video/mp4">
+
+    <!-- WebM as a fallback for Chrome/Firefox -->
+    <source src="hypest.webm" type="video/webm">
+
+    Your browser does not support the video tag.
+</video>
     </div>
 
     <!-- Header -->
@@ -360,4 +365,5 @@
         });
     </script>
 </body>
+
 </html>
