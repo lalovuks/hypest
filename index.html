@@ -239,15 +239,11 @@
 <body>
     <!-- Loading Screen -->
     <div id="loading-screen">
-        <video id="loading-video" autoplay muted playsinline>
-    <!-- MP4 for broad browser support -->
-    <source src="hypest.mp4" type="video/mp4">
-
-    <!-- WebM as a fallback for Chrome/Firefox -->
-    <source src="hypest.webm" type="video/webm">
-
-    Your browser does not support the video tag.
-</video>
+        <video id="loading-video" autoplay muted playsinline preload="auto">
+            <source src="hypest.mp4" type="video/mp4">
+            <source src="hypest.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
     </div>
 
     <!-- Header -->
@@ -332,6 +328,18 @@
         const loadingScreen = document.getElementById('loading-screen');
         const loadingVideo = document.getElementById('loading-video');
 
+        // Force video to play (some browsers block autoplay)
+        loadingVideo.play().catch(err => {
+            console.log('Autoplay failed:', err);
+            // If autoplay fails, still fade out after 3 seconds
+            setTimeout(() => {
+                loadingScreen.classList.add('fade-out');
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 1000);
+            }, 3000);
+        });
+
         // When video ends, fade out the loading screen
         loadingVideo.addEventListener('ended', () => {
             loadingScreen.classList.add('fade-out');
@@ -340,7 +348,7 @@
             }, 1000);
         });
 
-        // Fallback: If video fails to load or play, fade out after 3 seconds
+        // Fallback: If video hasn't ended after 10 seconds, fade out anyway
         setTimeout(() => {
             if (!loadingScreen.classList.contains('fade-out')) {
                 loadingScreen.classList.add('fade-out');
@@ -348,7 +356,7 @@
                     loadingScreen.style.display = 'none';
                 }, 1000);
             }
-        }, 3000);
+        }, 10000);
 
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -365,5 +373,4 @@
         });
     </script>
 </body>
-
 </html>
